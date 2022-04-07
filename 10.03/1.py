@@ -1,5 +1,7 @@
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 
 def neighbours(i):
     ix, iy = i
@@ -14,7 +16,8 @@ def update(s, h_loc, i):
 
 L = 100
 
-def avalan(s, h_loc):
+
+def avalan(s, h_loc,R):
     aval = np.zeros( (L, L), dtype=int )
     i_trig = np.unravel_index(np.argmax(h_loc + (s+1)*(-100)), h_loc.shape)
     H = - h_loc[i_trig]
@@ -30,7 +33,10 @@ def avalan(s, h_loc):
                     d.append(elem) 
     return np.sum(aval)
 
+
+
 def runner(R):
+        
         # lattice of spins
         s = np.ones( (L, L), dtype=int ) * (-1)
         # recording of avalanches
@@ -39,12 +45,27 @@ def runner(R):
         h_rnd = np.random.randn(L, L) * R
         # ... and the local fields
         h_loc = np.ones( (L, L), dtype=int ) * (-4.0) + h_rnd
-        return avalan(s, h_loc)
+        return avalan(s, h_loc,R)
 
-res = {r: np.average([runner(r) for _ in range(1000)]) for r in [0.7,0.9,1.4]}
+res = {r: [np.average([runner(r) for _ in range(1000)])for _ in range(5)] for r in [0.7,0.9,1.4]}
 
-print(res)
+bars = []
+errors = []
 
+for elem in res.values():
+    bars.append(np.average(elem))
+    errors.append(np.std(elem))
+
+barWidth = 0.3
+
+r1 = np.arange(len(bars))
+
+print(bars)
+
+plt.bar(r1, bars, width = barWidth, color = 'green', edgecolor = 'black', yerr=errors, capsize=7, label='poacee')
+plt.yscale('log')
+plt.xticks(r1,('0.7','0.9','1.4'))
+plt.show()
 
 # while np.sum(s) != L ** 2:
 #     aval = np.zeros( (L, L), dtype=int )

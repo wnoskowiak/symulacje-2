@@ -1,3 +1,4 @@
+from cProfile import label
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -29,8 +30,8 @@ def avalan(s, h_loc):
                     d.append(elem) 
     return np.sum(aval)
 
+L = 300
 for R in [0.9, 1.4, 2.1]:
-    L = 300
     # lattice of spins
     s = np.ones( (L, L), dtype=int ) * (-1)
     # recording of avalanches
@@ -62,12 +63,14 @@ for R in [0.9, 1.4, 2.1]:
         Ms.append(np.sum(s)/L**2)
 
     print(aval)
-    plt.plot(Ms,Hs)
-    plt.title(f'R={R}')
+    plt.plot(Ms,Hs,label = f'R={R}')
+    plt.title(f'H(M)')
+    plt.xlabel('M')
+    plt.ylabel('H')
     plt.xlim(-1,1)
     plt.ylim(-3,3)
-    plt.show()
-    plt.savefig(f'R={R}.png')
+plt.legend(frameon=False, loc='lower center', ncol=2)
+plt.show()
     
 
 

@@ -46,10 +46,11 @@ for R in [0.9,1.2,2.1]:
 
     counts, bins = np.histogram(sizes)
     print(counts, bins)
-    plt.plot(bins[:-1], counts)
+    plt.plot(bins[:-1], counts, label =f'R={R}')
     plt.xscale('log')
     plt.yscale('log')
-plt.savefig('lel.jpg')
+plt.legend(frameon=False, loc='upper right', ncol=2)
+plt.show()
 
     
 
